@@ -7,7 +7,8 @@ from constants import SECRET, ALGO, PWD_HASH_SALT, PWD_HASH_ITERATIONS
 from dao.model.user import User
 
 
-def get_hash(password):
+def get_hash(password: str):
+	"""Хэширует пароль"""
 	return hashlib.pbkdf2_hmac(
 		'sha256',
 		password.encode('utf-8'),
@@ -33,6 +34,7 @@ def create_data(app, db):
 
 
 def generate_jwt(user_obj: dict) -> dict:
+	"""Генерирует пару access_token/refresh_token"""
 	min30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
 	days130 = datetime.datetime.utcnow() + datetime.timedelta(days=130)
 	user_obj['exp'] = min30
@@ -44,6 +46,7 @@ def generate_jwt(user_obj: dict) -> dict:
 
 
 def check_keys(data: dict, allowed_keys: set):
+	"""Проверяет набор передаваемый ключей"""
 	keys = set(data.keys())
 	if not keys == allowed_keys:
 		raise Exception('Переданы неверные ключи')

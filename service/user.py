@@ -20,6 +20,9 @@ class UserService:
 	def check_password(self, name, other_password):
 		user = self.dao.get_one(name)
 		pwd_hash = self.get_hash(other_password)
-		# return pwd_hash == user_password
 		if pwd_hash != user.password:
-			raise Exception
+			raise Exception('Invalid password')
+
+	def create(self, new_user):
+		new_user['password'] = self.get_hash(new_user['password'])
+		return self.dao.create(new_user)

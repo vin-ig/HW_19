@@ -1,10 +1,10 @@
 import datetime
 
 import jwt
-from flask import request, abort, jsonify
+from flask import request, abort
 from flask_restx import Namespace, Resource
 
-from constants import SECRET, ALGO, TOKEN_KEYS, USER_KEYS
+from constants import SECRET, ALGO, TOKEN_KEYS
 from dao.model.user import UserSchema
 from implemented import user_service
 from utils import check_keys, generate_jwt
@@ -29,8 +29,7 @@ class AuthVIew(Resource):
 		return generate_jwt(user_dict), 201
 
 	def put(self):
-		token = request.json['refresh_token']
-		# token = request.headers.get('Authorization').split()[-1]
+		token = request.json.get('refresh_token')
 
 		try:
 			decode_token = jwt.decode(token, SECRET, ALGO)
